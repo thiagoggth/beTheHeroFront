@@ -1,12 +1,47 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import { FiArrowLeft } from 'react-icons/fi';
+
+import api from '../../services/api';
 
 import logo from '../../assets/logo.svg';
 import './styles.css';
 
 
 const NewIncident = () => {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [value, setValue] = useState('');
+
+  const ongId = localStorage.getItem('ongId');
+
+  const history = useHistory();
+
+  const handleNewIncident = e => {
+    e.preventDefault();
+    const data = {
+      title,
+      description,
+      value,
+    };
+
+    try {
+
+      api.post('incidents', data, {
+        headers: {
+          Authorization: ongId,
+        }
+      })
+        .then(
+          () => history.push('/profile')
+        )
+
+    } catch (err) {
+      alert('Erro ao cadastrar novo caso, tente novamente.')
+    }
+
+  }
+
   return (
     <div className="new-incident-container">
       <div className="content">
@@ -21,11 +56,27 @@ const NewIncident = () => {
           </Link>
         </section>
 
-        <form>
-          <input type="text" placeholder="Título do caso" required/>
-          <textarea placeholder="Descrição" required/>
-          <input type="text" placeholder="Whatsapp" required/>
-          <input type="text" placeholder="Valor em reais" required />
+        <form onSubmit={handleNewIncident}>
+          <input
+            type="text"
+            placeholder="Título do caso"
+            required
+            value={title}
+            onChange={e => setTitle(e.target.value)}
+          />
+          <textarea
+            placeholder="Descrição"
+            required
+            value={description}
+            onChange={e => setDescription(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Valor em reais"
+            required
+            value={value}
+            onChange={e => setValue(e.target.value)}
+          />
           <button className="btn" type="submit">Cadastrar</button>
         </form>
       </div>
