@@ -30,11 +30,11 @@ form textarea {
   height: 60px;
   border-radius: 8px;
   padding: 0 24px;
+  color: black;
 }
 
 form input {
   border: 1px solid #dcdce6;
-  color: #3333;
 }
 
 .btn {
